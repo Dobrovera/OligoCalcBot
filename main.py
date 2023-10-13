@@ -21,6 +21,18 @@ def start(message):
                      reply_markup=keyword)
 
 
+@bot.message_handler(commands=['help'])
+def help_info(message):
+    msg = bot.send_message(message.chat.id, 'Привет! \n\nЭтот бот создан для помощи в разработке молекулярно-генетических методик. \n \n'
+                                            'Здесь можно проверить длину, температуру плаврения, GC% праймера, перевернуть последовательность '
+                                            'или получить комплементарную цепь.\n\n'
+                                            'Рекомендации по дизайну праймеров: \n'
+                                            '1. Длина 16-25 нуклеотидов \n'
+                                            '2. Содержание пар G-C примерно 40-60% \n'
+                                            '3. Температура отжига 40-70С. Лучше, чтобы температура была 50-60С \n'
+                                            '4. Разница в температуре отжига в паре праймеров не должна превышать 6°C')
+
+
 @bot.callback_query_handler(func=lambda call: True)
 def answer(call):
     if call.data == 'length':
@@ -50,7 +62,6 @@ def answer(call):
 
 def get_lenght(message):
     msg = bot.send_message(message.chat.id, f"Длина = {len(message.text)}")
-    bot.register_next_step_handler(msg, start)
 
 
 def get_tm(message):
