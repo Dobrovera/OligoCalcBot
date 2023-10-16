@@ -24,7 +24,7 @@ def start(message):
 @bot.message_handler(commands=['help'])
 def help_info(message):
     msg = bot.send_message(message.chat.id, 'Привет! \n\nЭтот бот создан для помощи в разработке молекулярно-генетических методик. \n \n'
-                                            'Здесь можно проверить длину, температуру плаврения, GC% праймера, перевернуть последовательность '
+                                            'Здесь можно проверить длину, температуру плавления, GC% состав праймера, перевернуть последовательность '
                                             'или получить комплементарную цепь.\n\n'
                                             'Рекомендации по дизайну праймеров: \n'
                                             '1. Длина 16-25 нуклеотидов \n'
@@ -36,27 +36,34 @@ def help_info(message):
 @bot.callback_query_handler(func=lambda call: True)
 def answer(call):
     if call.data == 'length':
-        msg = bot.send_message(call.message.chat.id, 'Введите последовательность')
+        msg = bot.send_message(call.message.chat.id, 'Введите последовательность нуклеотидов')
         bot.register_next_step_handler(msg, get_lenght)
 
     elif call.data == 'temperature':
-        msg = bot.send_message(call.message.chat.id, 'Введите последовательность')
+        msg = bot.send_message(call.message.chat.id, 'Введите последовательность нуклеотидов '
+                                                     '(допустимые символы A, T, G, C, a, t, g, c).\n'
+                                                     'Максимальная длина последовательности - 100 нуклеотидов')
         bot.register_next_step_handler(msg, get_tm)
 
     elif call.data == 'reverse':
-        msg = bot.send_message(call.message.chat.id, 'Введите последовательность')
+        msg = bot.send_message(call.message.chat.id, 'Введите последовательность нуклеотидов')
         bot.register_next_step_handler(msg, get_reverse)
 
     elif call.data == 'compl':
-        msg = bot.send_message(call.message.chat.id, 'Введите последовательность')
+        msg = bot.send_message(call.message.chat.id, 'Введите последовательность нуклеотидов '
+                                                     '(допустимые символы A, T, G, C, a, t, g, c). \n'
+                                                     'Максимальная длина последовательности - 500 нуклеотидов')
         bot.register_next_step_handler(msg, get_complementary)
 
     elif call.data == 'gc':
-        msg = bot.send_message(call.message.chat.id, 'Введите последовательность')
+        msg = bot.send_message(call.message.chat.id, 'Введите последовательность нуклеотидов'
+                                                     '(допустимые символы A, T, G, C, a, t, g, c). \n'
+                                                     'Максимальная длина последовательности - 500 нуклеотидов')
         bot.register_next_step_handler(msg, get_gc)
 
     elif call.data == 'all':
-        msg = bot.send_message(call.message.chat.id, 'Введите последовательность')
+        msg = bot.send_message(call.message.chat.id, 'Введите последовательность нуклеотидов'
+                                                     '(допустимые символы A, T, G, C, a, t, g, c).')
         bot.register_next_step_handler(msg, get_main_info)
 
 
@@ -73,12 +80,12 @@ def get_tm(message):
     c = sequence.count('c')
 
     if len(sequence) > 100:
-        bot.send_message(message.chat.id, f"Последовательность слишком длинная. "
+        bot.send_message(message.chat.id, f"Расчитать Tm не получилось(\nПоследовательность слишком длинная. "
                                           f"Максимальная длина = 100 нуклеотидов")
         return None
 
     elif not re.match("^[ATGCatgc]*$", sequence):
-        bot.send_message(message.chat.id, f"Последовательность должна "
+        bot.send_message(message.chat.id, f"Расчитать Tm не получилось(\nПоследовательность должна "
                                           f"содержать только символы: A, C, G, T, a, c, g, t")
         return None
 
@@ -93,12 +100,12 @@ def get_gc(message):
     c = sequence.count('c')
 
     if len(sequence) > 500:
-        bot.send_message(message.chat.id, f"Последовательность слишком длинная. "
+        bot.send_message(message.chat.id, f"Расчитать GC состав не получилось(\nПоследовательность слишком длинная. "
                                           f"Максимальная длина = 500 нуклеотидов")
         return None
 
     elif not re.match("^[ATGCatgc]*$", sequence):
-        bot.send_message(message.chat.id, f"Последовательность должна "
+        bot.send_message(message.chat.id, f"Расчитать GC состав не получилось(\nПоследовательность должна "
                                           f"содержать только символы: A, C, G, T, a, c, g, t")
         return None
 
@@ -112,12 +119,14 @@ def get_complementary(message):
     complementary = ''
 
     if len(sequence) > 500:
-        bot.send_message(message.chat.id, f"Последовательность слишком длинная. "
+        bot.send_message(message.chat.id, f"Получить комплементарную цепь не получилось(\n"
+                                          f"Последовательность слишком длинная. "
                                           f"Максимальная длина = 500 нуклеотидов")
         return None
 
     elif not re.match("^[ATGCatgc]*$", sequence):
-        bot.send_message(message.chat.id, f"Последовательность должна "
+        bot.send_message(message.chat.id, f"Получить комплементарную цепь не получилось(\n"
+                                          f"Последовательность должна "
                                           f"содержать только символы: A, C, G, T, a, c, g, t")
         return None
 
@@ -136,7 +145,7 @@ def get_complementary(message):
 
 def get_reverse(message):
     sequence = str(message.text).upper()
-    bot.send_message(message.chat.id, f"{sequence[::-1]}")
+    bot.send_message(message.chat.id, f"Перевернутая последовательность - {sequence[::-1]}")
 
 
 def get_main_info(message):
