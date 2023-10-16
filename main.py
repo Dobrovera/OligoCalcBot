@@ -75,14 +75,6 @@ def get_tm(message):
 
     sequence = str(message.text).lower()
 
-    if sequence == '/start':
-        bot.register_next_step_handler(message, start)
-
-    a = sequence.count('a')
-    t = sequence.count('t')
-    g = sequence.count('g')
-    c = sequence.count('c')
-
     if len(sequence) > 100:
         bot.send_message(message.chat.id, f"Расчитать Tm не получилось(\nПоследовательность слишком длинная. "
                                           f"Максимальная длина = 100 нуклеотидов")
@@ -93,8 +85,20 @@ def get_tm(message):
                                           f"содержать только символы: A, C, G, T, a, c, g, t")
         return None
 
-    Tm = 2 * (a + t) + 4 * (g + c)
-    bot.send_message(message.chat.id, f"Температура плавления = {Tm}")
+    if sequence == '/start':
+        bot.register_next_step_handler(message, start)
+
+    elif sequence == '/help':
+        bot.register_next_step_handler(message, help_info)
+
+    else:
+        a = sequence.count('a')
+        t = sequence.count('t')
+        g = sequence.count('g')
+        c = sequence.count('c')
+
+        Tm = 2 * (a + t) + 4 * (g + c)
+        bot.send_message(message.chat.id, f"Температура плавления = {Tm}")
 
 
 def get_gc(message):
