@@ -75,7 +75,13 @@ def get_tm(message):
 
     sequence = str(message.text).lower()
 
-    if len(sequence) > 100:
+    if sequence == '/start':
+        bot.register_next_step_handler(message, start)
+
+    elif sequence == '/help':
+        bot.register_next_step_handler(message, help_info)
+
+    elif len(sequence) > 100:
         bot.send_message(message.chat.id, f"Расчитать Tm не получилось(\nПоследовательность слишком длинная. "
                                           f"Максимальная длина = 100 нуклеотидов")
         return None
@@ -84,12 +90,6 @@ def get_tm(message):
         bot.send_message(message.chat.id, f"Расчитать Tm не получилось(\nПоследовательность должна "
                                           f"содержать только символы: A, C, G, T, a, c, g, t")
         return None
-
-    if sequence == '/start':
-        bot.register_next_step_handler(message, start)
-
-    elif sequence == '/help':
-        bot.register_next_step_handler(message, help_info)
 
     else:
         a = sequence.count('a')
