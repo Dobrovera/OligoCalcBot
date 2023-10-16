@@ -56,13 +56,13 @@ def answer(call):
         bot.register_next_step_handler(msg, get_complementary)
 
     elif call.data == 'gc':
-        msg = bot.send_message(call.message.chat.id, 'Введите последовательность нуклеотидов'
+        msg = bot.send_message(call.message.chat.id, 'Введите последовательность нуклеотидов '
                                                      '(допустимые символы A, T, G, C, a, t, g, c). \n'
                                                      'Максимальная длина последовательности - 500 нуклеотидов')
         bot.register_next_step_handler(msg, get_gc)
 
     elif call.data == 'all':
-        msg = bot.send_message(call.message.chat.id, 'Введите последовательность нуклеотидов'
+        msg = bot.send_message(call.message.chat.id, 'Введите последовательность нуклеотидов '
                                                      '(допустимые символы A, T, G, C, a, t, g, c).')
         bot.register_next_step_handler(msg, get_main_info)
 
@@ -74,6 +74,10 @@ def get_lenght(message):
 def get_tm(message):
 
     sequence = str(message.text).lower()
+
+    if sequence == '/start':
+        bot.register_next_step_handler(message, start)
+
     a = sequence.count('a')
     t = sequence.count('t')
     g = sequence.count('g')
