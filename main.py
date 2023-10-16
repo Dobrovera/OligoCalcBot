@@ -120,8 +120,9 @@ def get_gc(message):
         bot.send_message(message.chat.id, f"Расчитать GC состав не получилось(\nПоследовательность должна "
                                           f"содержать только символы: A, C, G, T, a, c, g, t")
 
-    gc = int(((g + c) / len(sequence)) * 100)
-    bot.send_message(message.chat.id, f"GC% = {gc}")
+    else:
+        gc = int(((g + c) / len(sequence)) * 100)
+        bot.send_message(message.chat.id, f"GC% = {gc}")
     return None
 
 
@@ -140,17 +141,18 @@ def get_complementary(message):
                                           f"Последовательность должна "
                                           f"содержать только символы: A, C, G, T, a, c, g, t")
 
-    for i in sequence:
-        if i == 'a':
-            complementary += 'T'
-        elif i == 't':
-            complementary += 'A'
-        elif i == 'g':
-            complementary += 'C'
-        elif i == 'c':
-            complementary += 'G'
+    else:
+        for i in sequence:
+            if i == 'a':
+                complementary += 'T'
+            elif i == 't':
+                complementary += 'A'
+            elif i == 'g':
+                complementary += 'C'
+            elif i == 'c':
+                complementary += 'G'
 
-    bot.send_message(message.chat.id, f"Комплементарная цепь = {complementary}")
+        bot.send_message(message.chat.id, f"Комплементарная цепь = {complementary}")
     return None
 
 
