@@ -19,6 +19,7 @@ def start(message):
     keyword.add(item_length, item_reverse, item_temperature, item_gc, item_complementary, item_main_info)
     bot.send_message(message.chat.id, 'Что хотите проверить?',
                      reply_markup=keyword)
+    return None
 
 
 @bot.message_handler(commands=['help'])
@@ -31,6 +32,7 @@ def help_info(message):
                                             '2. Содержание пар G-C примерно 40-60% \n'
                                             '3. Температура отжига 40-70С. Лучше, чтобы температура была 50-60С \n'
                                             '4. Разница в температуре отжига в паре праймеров не должна превышать 6°C')
+    return None
 
 
 @bot.callback_query_handler(func=lambda call: True)
@@ -65,10 +67,12 @@ def answer(call):
         msg = bot.send_message(call.message.chat.id, 'Введите последовательность нуклеотидов '
                                                      '(допустимые символы A, T, G, C, a, t, g, c).')
         bot.register_next_step_handler(msg, get_main_info)
+    return None
 
 
 def get_lenght(message):
     msg = bot.send_message(message.chat.id, f"Длина = {len(message.text)}")
+    return None
 
 
 def get_tm(message):
@@ -76,7 +80,8 @@ def get_tm(message):
     sequence = str(message.text).lower()
 
     if sequence == '/start':
-        bot.register_next_step_handler(message, start)
+        msg = bot.send_message(message.chat.id, '')
+        bot.register_next_step_handler(msg, start)
 
     elif sequence == '/help':
         bot.register_next_step_handler(message, help_info)
@@ -84,12 +89,10 @@ def get_tm(message):
     elif len(sequence) > 100:
         bot.send_message(message.chat.id, f"Расчитать Tm не получилось(\nПоследовательность слишком длинная. "
                                           f"Максимальная длина = 100 нуклеотидов")
-        return None
 
     elif not re.match("^[ATGCatgc]*$", sequence):
         bot.send_message(message.chat.id, f"Расчитать Tm не получилось(\nПоследовательность должна "
                                           f"содержать только символы: A, C, G, T, a, c, g, t")
-        return None
 
     else:
         a = sequence.count('a')
@@ -99,6 +102,8 @@ def get_tm(message):
 
         Tm = 2 * (a + t) + 4 * (g + c)
         bot.send_message(message.chat.id, f"Температура плавления = {Tm}")
+
+    return None
 
 
 def get_gc(message):
@@ -110,15 +115,14 @@ def get_gc(message):
     if len(sequence) > 500:
         bot.send_message(message.chat.id, f"Расчитать GC состав не получилось(\nПоследовательность слишком длинная. "
                                           f"Максимальная длина = 500 нуклеотидов")
-        return None
 
     elif not re.match("^[ATGCatgc]*$", sequence):
         bot.send_message(message.chat.id, f"Расчитать GC состав не получилось(\nПоследовательность должна "
                                           f"содержать только символы: A, C, G, T, a, c, g, t")
-        return None
 
     gc = int(((g + c) / len(sequence)) * 100)
     bot.send_message(message.chat.id, f"GC% = {gc}")
+    return None
 
 
 def get_complementary(message):
@@ -130,13 +134,11 @@ def get_complementary(message):
         bot.send_message(message.chat.id, f"Получить комплементарную цепь не получилось(\n"
                                           f"Последовательность слишком длинная. "
                                           f"Максимальная длина = 500 нуклеотидов")
-        return None
 
     elif not re.match("^[ATGCatgc]*$", sequence):
         bot.send_message(message.chat.id, f"Получить комплементарную цепь не получилось(\n"
                                           f"Последовательность должна "
                                           f"содержать только символы: A, C, G, T, a, c, g, t")
-        return None
 
     for i in sequence:
         if i == 'a':
@@ -149,11 +151,13 @@ def get_complementary(message):
             complementary += 'G'
 
     bot.send_message(message.chat.id, f"Комплементарная цепь = {complementary}")
+    return None
 
 
 def get_reverse(message):
     sequence = str(message.text).upper()
     bot.send_message(message.chat.id, f"Перевернутая последовательность - {sequence[::-1]}")
+    return None
 
 
 def get_main_info(message):
@@ -161,6 +165,7 @@ def get_main_info(message):
     get_tm(message)
     get_gc(message)
     get_complementary(message)
+    return None
 
 
 bot.polling(none_stop=True)
