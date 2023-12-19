@@ -2,9 +2,11 @@ import telebot
 import re
 import os
 from telebot import types
+from dotenv import load_dotenv
 
 
-TELEGRAM_TOKEN = os.getenv("SECRET_KEY")
+load_dotenv()
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 bot = telebot.TeleBot(TELEGRAM_TOKEN)
 
 
