@@ -6,7 +6,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-bot = telebot.TeleBot(os.getenv('TELEGRAM_TOKEN'))
+TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
+
+bot = telebot.TeleBot(TELEGRAM_TOKEN)
 
 
 @bot.message_handler(commands=['start'])
