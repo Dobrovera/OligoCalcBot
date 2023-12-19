@@ -4,7 +4,7 @@ import os
 from telebot import types
 
 
-TELEGRAM_TOKEN = os.environ.get("SECRET_KEY")
+TELEGRAM_TOKEN = os.getenv("SECRET_KEY")
 bot = telebot.TeleBot(TELEGRAM_TOKEN)
 
 
