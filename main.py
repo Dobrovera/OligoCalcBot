@@ -1,9 +1,10 @@
 import telebot
 import re
+import os
 from telebot import types
 
 
-bot = telebot.TeleBot('6334404043:AAHZeb4U0v1r9pUvqwBboyfgBLZ667nJfds')
+bot = telebot.TeleBot(os.environ['TELEGRAM_TOKEN'])
 
 
 @bot.message_handler(commands=['start'])
