@@ -2,9 +2,11 @@ import telebot
 import re
 import os
 from telebot import types
+from dotenv import load_dotenv
 
+load_dotenv()
 
-bot = telebot.TeleBot(os.environ['TELEGRAM_TOKEN'])
+bot = telebot.TeleBot(os.getenv('TELEGRAM_TOKEN'))
 
 
 @bot.message_handler(commands=['start'])
